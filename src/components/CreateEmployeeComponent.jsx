@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
-import { createEmployee } from '../services/EmployeeService';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import {
+	createEmployee,
+	getEmployeesWithId,
+	updateEmployee,
+} from '../services/EmployeeService';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 
 const CreateEmployeeComponent = () => {
 	const navigate = useNavigate();
+	const { id } = useParams();
+
+	console.log(id);
 
 	const [newEmployee, setNewEmployee] = useState({
 		firstName: '',
@@ -11,30 +18,55 @@ const CreateEmployeeComponent = () => {
 		emailId: '',
 	});
 
-	const onClickSaveEmployee = (e) => {
+	useEffect(() => {
+		if (id) {
+			getEmployeesWithId(id)
+				.then((res) => {
+					setNewEmployee({
+						firstName: res.data.firstName,
+						lastName: res.data.lastName,
+						emailId: res.data.emailId,
+					});
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		}
+	}, [id]);
+
+	const onClickUpdateOrSaveEmployee = (e) => {
 		e.preventDefault();
 		let employee = {
 			firstName: newEmployee.firstName,
 			lastName: newEmployee.lastName,
-			email: newEmployee.emailId,
+			emailId: newEmployee.emailId,
 		};
-		createEmployee(employee).then((res) => {
-			navigate('/employees');
-		});
+
+		if (id === undefined) {
+			createEmployee(employee).then((res) => {
+				navigate('/employees');
+			});
+		} else {
+			updateEmployee(id, employee).then((res) => {
+				navigate('/employees');
+			});
+		}
 	};
 
 	return (
 		<div>
-			<div className="container">
+			<Link to={`/employees`}>Go back to Employees</Link>
+			<div className="container py-5">
 				<div className="row">
 					<div className="card col-md-6 offset-md-3 offset-md-3">
-						<h3 className="text-center">Add Employee</h3>
+						<h3 className="text-center p-3">
+							{id ? 'Update Employee' : 'Add Employee'}
+						</h3>
 						<div className="card-body">
 							<form>
 								<div className="form-group">
 									<label>First Name</label>
 									<input
-										required
 										type="text"
 										placeholder="FirstName"
 										name="firstName"
@@ -47,12 +79,12 @@ const CreateEmployeeComponent = () => {
 												emailId: newEmployee.emailId,
 											})
 										}
+										required
 									/>
 								</div>
 								<div className="form-group">
 									<label>Last Name</label>
 									<input
-										required
 										type="text"
 										placeholder="Last Name"
 										name="lastName"
@@ -65,13 +97,14 @@ const CreateEmployeeComponent = () => {
 												emailId: newEmployee.emailId,
 											})
 										}
+										required
 									/>
 								</div>
 								<div className="form-group">
 									<label>Email Id</label>
 									<input
 										type="email"
-										placeholder="EmailId"
+										placeholder="Email Id"
 										name="emailId"
 										className="form-control"
 										value={newEmployee.emailId}
@@ -82,16 +115,16 @@ const CreateEmployeeComponent = () => {
 												emailId: e.target.value,
 											})
 										}
+										required
 									/>
 								</div>
 
 								<button
 									className="btn btn-success"
-									onClick={onClickSaveEmployee}
+									onClick={onClickUpdateOrSaveEmployee}
 								>
 									Save
 								</button>
-								<button className="btn btn-danger">Cancel</button>
 							</form>
 						</div>
 					</div>
