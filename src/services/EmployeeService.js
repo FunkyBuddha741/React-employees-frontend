@@ -1,6 +1,20 @@
 import axios from 'axios';
+import { getToken } from './AuthService';
 
 const EMPLOYEE_API_BASE_URL = 'http://localhost:8080/api/v1/employees';
+
+// For sending token in authorization header
+
+axios.interceptors.request.use(
+	function (config) {
+		config.headers['Authorization'] = getToken();
+		return config;
+	},
+	function (error) {
+		return Promise.reject(error);
+	}
+);
+
 
 export const getEmployees = () => {
 	return axios.get(EMPLOYEE_API_BASE_URL);
