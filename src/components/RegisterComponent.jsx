@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import { registerAPICall } from '../services/AuthService';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 const RegisterComponent = () => {
+	const navigate = useNavigate();
 	const [registrationInfo, setRegistrationInfo] = useState({
 		firstName: '',
 		lastName: '',
@@ -29,7 +30,7 @@ const RegisterComponent = () => {
 		registerAPICall(user)
 			.then((res) => {
 				console.log(res.data);
-				<Navigate to={'/login'} />;
+				navigate('/login');
 			})
 			.catch((err) => {
 				console.log(err);

@@ -3,6 +3,7 @@ import {
 	loginAPICall,
 	storeToken,
 	saveLoggedInUser,
+	saveUserRoles,
 } from '../services/AuthService';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -18,8 +19,8 @@ const LoginComponent = () => {
 			.then((response) => {
 				const token = 'Bearer ' + response.data.token;
 				storeToken(token);
-
 				saveLoggedInUser(user.usernameOrEmail);
+				saveUserRoles(response.data.roles);
 				navigator('/employees');
 
 				window.location.reload(false);

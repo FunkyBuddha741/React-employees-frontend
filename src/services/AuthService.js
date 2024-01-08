@@ -33,15 +33,26 @@ export const getToken = () => {
 	return token;
 };
 
+export const getUserRoles = () => {
+	const roles = JSON.parse(sessionStorage.getItem('roles'));
+	return roles;
+};
+
 export const saveLoggedInUser = (username) => {
 	sessionStorage.setItem('authenticatedUser', username);
 };
 
+export const saveUserRoles = (roles) => {
+	sessionStorage.setItem('roles', JSON.stringify(roles));
+};
+
 export const isUserLoggedIn = () => {
 	const username = sessionStorage.getItem('authenticatedUser');
+	console.log(username);
 
-	if (username === null) return false;
-	else return true;
+	if (username === null) {
+		return false;
+	} else return true;
 };
 
 export const getLoggedInUser = () => {
@@ -50,6 +61,14 @@ export const getLoggedInUser = () => {
 };
 
 export const logOut = () => {
-	localStorage.clear();
-	sessionStorage.clear();
+	return new Promise((resolve, reject) => {
+		axios
+			.post(`${AUTH_REST_API_BASE}/logout`)
+			.then((response) => {
+				resolve(response);
+				localStorage.clear();
+				sessionStorage.clear();
+			})
+			.catch((err) => reject(err));
+	});
 };
