@@ -2,13 +2,9 @@ import React from 'react';
 
 const FooterComponent = () => {
 	return (
-		<div>
-			<footer className="footer">
-				<span className="text-muted">
-					All Rights Reserved 2020 @Ronaj Pradhan
-				</span>
-			</footer>
-		</div>
+		<footer className="footer bg-dark text-white text-center">
+			<div className="text-center p-3">© 2024 Copyright: Ronaj Pradhan</div>
+		</footer>
 	);
 };
 

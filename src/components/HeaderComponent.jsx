@@ -1,29 +1,22 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
-import { logOut, isUserLoggedIn } from '../services/AuthService';
-import { useNavigate } from 'react-router-dom';
+import { logOut, isUserLoggedIn, useAuth } from '../services/AuthService';
 
 const HeaderComponent = () => {
-	const [isTrue, setIsTrue] = useState(false);
+	const auth = useAuth();
 
-	useEffect(() => {
-		setIsTrue(isUserLoggedIn());
-	}, []);
-
-	const navigate = useNavigate();
+	console.log(auth.user);
 
 	const handleLogout = () => {
-		logOut();
-		setIsTrue(false);
-		navigate('/login');
+		auth.logout();
 	};
 
 	return (
 		<div>
 			<header>
-				<nav className="navbar navbar-expand-md navbar-dark bg-dark">
+				<nav className="navbar navbar-expand-md navbar-dark bg-dark justify-content-between mb-4">
 					<div className="navbar-brand">Employee Management App</div>
-					{isTrue && (
+					{auth.user && (
 						<button className="btn btn-danger" onClick={() => handleLogout()}>
 							Log out
 						</button>

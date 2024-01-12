@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { getEmployees, deleteEmployee } from '../services/EmployeeService';
 import { useNavigate, Link } from 'react-router-dom';
-import { getUserRoles } from '../services/AuthService';
+import { getUserRoles, useAuth } from '../services/AuthService';
+import edit from '../assets/image/edit.svg';
+import del from '../assets/image/delete.svg';
 
 const ListEmployeeComponent = () => {
 	let navigate = useNavigate();
+
 	const [employees, setEmployees] = useState([]);
 	const [userRoles, setUserRoles] = useState([]);
 
@@ -37,22 +40,23 @@ const ListEmployeeComponent = () => {
 	};
 
 	return (
-		<div>
+		<>
 			<h2 className="text-center">Employees List</h2>
-			<div className="row my-5">
+			<div style={{ float: 'right', marginBottom: '15px', marginTop: '15px' }}>
 				{userRoles.includes('ROLE_ADMIN') ? (
-					<button className="btn btn-primary" onClick={onHandleClick}>
+					<button className="btn btn-success" onClick={onHandleClick}>
 						Add Employee
 					</button>
 				) : null}
 			</div>
-			<div className="row">
-				<table className="table table-striped table-bordered">
+
+			<div className="table-responsive-xl">
+				<table className="table table-hover">
 					<thead>
 						<tr>
-							<th>Employee First Name</th>
-							<th>Employee Last Name</th>
-							<th>Employee Email Id</th>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Email Id</th>
 							{userRoles.includes('ROLE_ADMIN') ||
 							userRoles.includes('ROLE_MODERATOR') ? (
 								<th>Actions</th>
@@ -69,19 +73,40 @@ const ListEmployeeComponent = () => {
 									{userRoles.includes('ROLE_ADMIN') ||
 									userRoles.includes('ROLE_MODERATOR') ? (
 										<td>
-											<Link
-												className="btn btn-info"
-												to={`/edit-employee/${employee.id}`}
+											<div style={{ display: 'inline', width: '25px' }}>
+												<Link
+													style={{ width: '25px' }}
+													to={`/edit-employee/${employee.id}`}
+												>
+													<img
+														style={{ width: 'inherit', cursor: 'pointer' }}
+														src={edit}
+														alt=""
+													/>
+												</Link>
+											</div>
+											<div
+												style={{
+													display: 'inline',
+													width: '25px',
+													marginLeft: '8px',
+												}}
 											>
-												Update
-											</Link>
-											<button
+												<img
+													style={{ width: 'inherit', cursor: 'pointer' }}
+													src={del}
+													onClick={() => onDeleteEmployee(employee.id)}
+													alt=""
+												/>
+											</div>
+
+											{/* <button
 												className="btn btn-danger"
 												onClick={() => onDeleteEmployee(employee.id)}
 												style={{ marginLeft: '10px' }}
 											>
 												Delete
-											</button>
+											</button> */}
 										</td>
 									) : null}
 								</tr>
@@ -90,7 +115,7 @@ const ListEmployeeComponent = () => {
 					</tbody>
 				</table>
 			</div>
-		</div>
+		</>
 	);
 };
 

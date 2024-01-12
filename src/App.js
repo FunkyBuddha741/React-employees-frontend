@@ -6,29 +6,14 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import CreateEmployeeComponent from './components/CreateEmployeeComponent';
 import RegisterComponent from './components/RegisterComponent';
 import LoginComponent from './components/LoginComponent';
-import { isUserLoggedIn, getUserRoles } from './services/AuthService';
+import { AuthProvider } from './services/AuthService';
 import ForbiddenComponent from './components/ForbiddenComponent';
+import AuthenticatedRoute from './routes/AuthenticatedRoute';
+import ProtectedRoute from './routes/ProtectedRoute';
 
 function App() {
-	let AuthenticatedRoute = ({ children }) => {
-		const isAuth = isUserLoggedIn();
-		if (isAuth) {
-			return children;
-		}
-		return <Navigate to="/" />;
-	};
-
-	let ProtectedRoute = ({ children }) => {
-		const roles = getUserRoles();
-		if (roles.includes('ROLE_USER')) {
-			<Navigate to="/Forbidden" />;
-		} else {
-			return children;
-		}
-	};
-
 	return (
-		<>
+		<AuthProvider>
 			<HeaderComponent />
 			<div className="container">
 				<Routes>
@@ -66,8 +51,8 @@ function App() {
 					<Route path="/forbidden" element={<ForbiddenComponent />} />
 				</Routes>
 			</div>
-			<FooterComponent />
-		</>
+			{/* <FooterComponent /> */}
+		</AuthProvider>
 	);
 }
 

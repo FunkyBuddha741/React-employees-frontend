@@ -15,7 +15,6 @@ axios.interceptors.request.use(
 	}
 );
 
-
 export const getEmployees = () => {
 	return axios.get(EMPLOYEE_API_BASE_URL);
 };
