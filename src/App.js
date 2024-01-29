@@ -10,6 +10,8 @@ import { AuthProvider } from './services/AuthService';
 import ForbiddenComponent from './components/ForbiddenComponent';
 import AuthenticatedRoute from './routes/AuthenticatedRoute';
 import ProtectedRoute from './routes/ProtectedRoute';
+import { ToastContainer } from 'react-toastify';
+import AuthVerify from './services/AuthVerify';
 
 function App() {
 	return (
@@ -50,8 +52,10 @@ function App() {
 					/>
 					<Route path="/forbidden" element={<ForbiddenComponent />} />
 				</Routes>
+				<ToastContainer />
 			</div>
 			{/* <FooterComponent /> */}
+			<AuthVerify />
 		</AuthProvider>
 	);
 }

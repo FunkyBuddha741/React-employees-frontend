@@ -6,6 +6,9 @@ import {
 } from '../services/EmployeeService';
 import { useNavigate, Link, useParams } from 'react-router-dom';
 import leftArrow from '../assets/image/leftArrow.svg';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { showToast } from '../utils/showToast';
 
 const CreateEmployeeComponent = () => {
 	const navigate = useNavigate();
@@ -43,10 +46,12 @@ const CreateEmployeeComponent = () => {
 
 		if (id === undefined) {
 			createEmployee(employee).then((res) => {
+				showToast('Employee saved successfully', 'success');
 				navigate('/employees');
 			});
 		} else {
 			updateEmployee(id, employee).then((res) => {
+				showToast('Employee updated successfully', 'success');
 				navigate('/employees');
 			});
 		}

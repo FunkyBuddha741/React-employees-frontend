@@ -49,7 +49,7 @@ const RegisterComponent = () => {
 						<h2 className="text-center">User Registration Form</h2>
 					</div>
 					<div className="card-body">
-						<form>
+						<form onSubmit={(e) => registerUser(e)}>
 							<div className="form-row">
 								<div className="form-group col-md-6">
 									<label>First Name</label>
@@ -58,6 +58,7 @@ const RegisterComponent = () => {
 										name="firstName"
 										className="form-control"
 										placeholder="Enter First Name"
+										required
 										value={registrationInfo.firstName}
 										onChange={(e) =>
 											setRegistrationInfo({
@@ -81,6 +82,7 @@ const RegisterComponent = () => {
 												lastName: e.target.value,
 											})
 										}
+										required
 									/>
 								</div>
 							</div>
@@ -99,6 +101,7 @@ const RegisterComponent = () => {
 												userName: e.target.value,
 											})
 										}
+										required
 									/>
 								</div>
 								<div className="form-group col-md-6">
@@ -108,6 +111,7 @@ const RegisterComponent = () => {
 										onChange={handleChange}
 										value={registrationInfo.role}
 										isMulti
+										required
 									/>
 								</div>
 							</div>
@@ -127,6 +131,7 @@ const RegisterComponent = () => {
 											email: e.target.value,
 										})
 									}
+									required
 								/>
 							</div>
 
@@ -145,13 +150,11 @@ const RegisterComponent = () => {
 											password: e.target.value,
 										})
 									}
+									required
 								/>
 							</div>
 
-							<button
-								className="btn btn-primary"
-								onClick={(e) => registerUser(e)}
-							>
+							<button type="submit" className="btn btn-primary">
 								Submit
 							</button>
 						</form>

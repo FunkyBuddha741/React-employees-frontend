@@ -19,7 +19,7 @@ const LoginComponent = () => {
 						<h2 className="text-center"> Login Form </h2>
 					</div>
 					<div className="card-body">
-						<form>
+						<form onSubmit={(e) => handleLoginForm(e)}>
 							<div className="form-group col-md-12">
 								<label>Username or Email</label>
 								<input
@@ -27,6 +27,7 @@ const LoginComponent = () => {
 									name="username"
 									className="form-control"
 									placeholder="Enter username"
+									required
 									value={user.usernameOrEmail}
 									onChange={(e) =>
 										setUser({ ...user, usernameOrEmail: e.target.value })
@@ -42,6 +43,7 @@ const LoginComponent = () => {
 									name="password"
 									className="form-control"
 									placeholder="Enter password"
+									required
 									value={user.password}
 									onChange={(e) =>
 										setUser({ ...user, password: e.target.value })
@@ -49,10 +51,7 @@ const LoginComponent = () => {
 								></input>
 							</div>
 							<div className="form-group col-md-6">
-								<button
-									className="btn btn-primary"
-									onClick={(e) => handleLoginForm(e)}
-								>
+								<button type="submit" className="btn btn-primary">
 									Submit
 								</button>
 							</div>

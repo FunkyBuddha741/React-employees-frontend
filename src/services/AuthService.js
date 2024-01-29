@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useMemo, createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStorage } from '../hooks/useSessionStorage';
+import instance from './Api';
 
 const AUTH_REST_API_BASE = 'http://localhost:8080/api/auth';
 
@@ -11,12 +12,16 @@ export const AuthProvider = ({ children }) => {
 	const [user, setUser] = useSessionStorage('user', null);
 	const [token, setToken] = useSessionStorage('token', null);
 	const [roles, setRoles] = useSessionStorage('roles', null);
+	const [refreshToken, setRefreshToken] = useSessionStorage(
+		'refreshToken',
+		null
+	);
 	const navigate = useNavigate();
 
 	// call this function when you want to authenticate the user
 	const login = async (req) => {
 		return await new Promise((resolve, reject) => {
-			axios
+			instance
 				.post(`${AUTH_REST_API_BASE}/login`, req)
 				.then((response) => {
 					resolve(response);
@@ -25,10 +30,10 @@ export const AuthProvider = ({ children }) => {
 		})
 			.then((response) => {
 				const token = 'Bearer ' + response.data.token;
-				console.log(token);
 				setToken(token);
 				setUser(response.data.userName);
 				setRoles(response.data.roles);
+				setRefreshToken(response.data.refreshToken); //
 				navigate('/employees');
 			})
 			.catch((err) => {
@@ -39,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 	// call this function to sign out logged in user
 	const logout = async () => {
 		return await new Promise((resolve, reject) => {
-			axios
+			instance
 				.post(`${AUTH_REST_API_BASE}/logout`)
 				.then((response) => {
 					resolve(response);
@@ -68,7 +73,7 @@ export const useAuth = () => {
 
 export const registerAPICall = (req) => {
 	return new Promise((resolve, reject) => {
-		axios
+		instance
 			.post(`${AUTH_REST_API_BASE}/register`, req)
 			.then((response) => {
 				resolve(response);
@@ -79,7 +84,7 @@ export const registerAPICall = (req) => {
 
 export const loginAPICall = (req) => {
 	return new Promise((resolve, reject) => {
-		axios
+		instance
 			.post(`${AUTH_REST_API_BASE}/login`, req)
 			.then((response) => {
 				resolve(response);
@@ -89,11 +94,16 @@ export const loginAPICall = (req) => {
 };
 
 export const storeToken = (token) => {
-	localStorage.setItem('token', token);
+	sessionStorage.setItem('token', JSON.stringify(token));
 };
 
 export const getToken = () => {
 	const token = JSON.parse(sessionStorage.getItem('token'));
+	return token;
+};
+
+export const getRefreshToken = () => {
+	const token = JSON.parse(sessionStorage.getItem('refreshToken'));
 	return token;
 };
 
