@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate} from 'react-router-dom';
 import { useAuth, getToken } from './AuthService';
 
 const parseJwt = (token) => {
@@ -11,8 +11,10 @@ const parseJwt = (token) => {
 };
 
 const AuthVerify = () => {
-	const { auth } = useAuth();
+	const auth  = useAuth(); 
 	let location = useLocation();
+	let navigate = useNavigate();
+	
 
 	useEffect(() => {
 		const user = JSON.parse(sessionStorage.getItem('user'));
@@ -21,7 +23,9 @@ const AuthVerify = () => {
 			const decodedJwt = parseJwt(getToken());
 			console.log(decodedJwt, 'inside auth verify');
 			if (decodedJwt.exp * 1000 < Date.now()) {
-				auth.logout();
+				console.log('logging out!')
+				// auth.logout();
+				navigate('/login');	
 			}
 		}
 	}, [location, auth]);

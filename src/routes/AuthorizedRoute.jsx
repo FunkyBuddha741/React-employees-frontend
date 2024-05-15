@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth, getUserRoles } from '../services/AuthService';
 import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({ children }) => {
+const AuthorizedRoute = ({ children }) => {
 	const roles = getUserRoles();
 
 	if (roles.includes('ROLE_USER')) {
@@ -12,4 +12,4 @@ const ProtectedRoute = ({ children }) => {
 	}
 };
 
-export default ProtectedRoute;
+export default AuthorizedRoute;

@@ -9,7 +9,7 @@ import LoginComponent from './components/LoginComponent';
 import { AuthProvider } from './services/AuthService';
 import ForbiddenComponent from './components/ForbiddenComponent';
 import AuthenticatedRoute from './routes/AuthenticatedRoute';
-import ProtectedRoute from './routes/ProtectedRoute';
+import AuthorizedRoute from './routes/AuthorizedRoute';
 import { ToastContainer } from 'react-toastify';
 import AuthVerify from './services/AuthVerify';
 
@@ -34,9 +34,9 @@ function App() {
 						path="/add-employee"
 						element={
 							<AuthenticatedRoute>
-								<ProtectedRoute>
+								<AuthorizedRoute>
 									<CreateEmployeeComponent />
-								</ProtectedRoute>
+								</AuthorizedRoute>
 							</AuthenticatedRoute>
 						}
 					/>
@@ -44,9 +44,9 @@ function App() {
 						path="/edit-employee/:id"
 						element={
 							<AuthenticatedRoute>
-								<ProtectedRoute>
+								<AuthorizedRoute>
 									<CreateEmployeeComponent />
-								</ProtectedRoute>
+								</AuthorizedRoute>
 							</AuthenticatedRoute>
 						}
 					/>
@@ -55,7 +55,7 @@ function App() {
 				<ToastContainer />
 			</div>
 			{/* <FooterComponent /> */}
-			<AuthVerify />
+			{/* <AuthVerify /> */}
 		</AuthProvider>
 	);
 }
