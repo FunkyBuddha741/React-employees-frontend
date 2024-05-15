@@ -11,15 +11,18 @@ import del from '../assets/image/delete.svg';
 import { showToast } from '../utils/showToast';
 import PaginationComponent from './PaginationComponent';
 import Select from 'react-select';
+import ModelOverlay from './ModelOverlay';
 
 const ListEmployeeComponent = () => {
 	let navigate = useNavigate();
 	const [itemsPerPage, setItemsPerPage] = useState(5);
 	const [activePage, setActivePage] = useState(1);
 
+	const [modalShow, setModalShow] = useState(false);
+
 	const [data, setData] = useState([]);
 
-	console.log(data);
+	const [id, setId] = useState();
 
 	const [userRoles, setUserRoles] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -44,6 +47,7 @@ const ListEmployeeComponent = () => {
 					.then((res) => {
 						setData(res.data);
 						setLoading(false);
+						setModalShow(false);
 					})
 					.catch((err) => {
 						console.log(err);
@@ -81,6 +85,13 @@ const ListEmployeeComponent = () => {
 
 	return (
 		<>
+			{modalShow && (
+				<ModelOverlay
+					show={modalShow}
+					onHide={() => setModalShow(false)}
+					onDelete={() => onDeleteEmployee(id)}
+				/>
+			)}
 			<h2 className="text-center">Employees List</h2>
 			{/* <div
 				style={{
@@ -110,7 +121,7 @@ const ListEmployeeComponent = () => {
 				) : (
 					<div className="table-responsive-xl">
 						<table className="table table-hover">
-							<thead>
+							<thead className="thead-dark">
 								<tr>
 									<th>First Name</th>
 									<th>Last Name</th>
@@ -153,7 +164,10 @@ const ListEmployeeComponent = () => {
 														<img
 															style={{ width: 'inherit', cursor: 'pointer' }}
 															src={del}
-															onClick={() => onDeleteEmployee(employee.id)}
+															onClick={() => {
+																setModalShow(!modalShow);
+																setId(employee.id);
+															}}
 															alt=""
 														/>
 													</div>
